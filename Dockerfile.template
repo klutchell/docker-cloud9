@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     openssh-server \
     samba \
-    samba-common-tools \
     supervisor \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -17,6 +16,7 @@ WORKDIR /usr/src/app
 RUN git clone https://github.com/c9/core.git . \
     && scripts/install-sdk.sh
 
+# install smb and supervisor config files
 COPY *.conf /config/
 
 # set a simple samba password for the root user
