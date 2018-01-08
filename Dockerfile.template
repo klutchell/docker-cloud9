@@ -1,4 +1,4 @@
-FROM resin/rpi-raspbian:jessie
+FROM resin/rpi-raspbian:latest
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -14,9 +14,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /usr/src/app
 
+RUN [ "cross-build-start" ]
+
 # install cloud9 sdk
 RUN git clone https://github.com/c9/core.git . \
     && scripts/install-sdk.sh
+    
+RUN [ "cross-build-end" ]
 
 # install smb and supervisor config files
 COPY *.conf /config/
