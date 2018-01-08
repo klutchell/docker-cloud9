@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     git \
-    openssh \
+    openssh-server \
     samba \
     samba-common-tools \
     supervisor \
