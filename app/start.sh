@@ -18,7 +18,7 @@ then
 fi
 
 # set permissions on ssh config dir
-chown -R ${SSH_USER}:${SSH_GROUP} "${ssh_config_dir}"
+chown -R abc:abc "${ssh_config_dir}"
 chmod -R 700 "${ssh_config_dir}"
 
 # start multiple processes with supervisor

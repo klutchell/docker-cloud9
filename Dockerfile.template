@@ -1,10 +1,5 @@
 FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
 
-ENV SSH_USER abc
-ENV SSH_GROUP abc
-ENV SSH_UID 1000
-ENV SSH_GID 1000
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     openssh-server \
@@ -38,10 +33,10 @@ RUN mv /bin/uname.orig /bin/uname
 COPY *.conf /config/
 
 # create new user and group for samba and ssh access
-RUN groupadd -g ${SSH_GID} ${SSH_GROUP} && useradd -u ${SSH_UID} -m -l -s /bin/bash -g ${SSH_GROUP} ${SSH_USER}
+RUN groupadd -g 1000 abc && useradd -u 1000 -m -l -s /bin/bash -g abc abc
 
 # set a simple samba password for the new user
-RUN /bin/echo -e "${SSH_USER}\n${SSH_USER}" | smbpasswd -a -s -c /config/smb.conf ${SSH_USER}
+RUN /bin/echo -e "abc\nabc" | smbpasswd -a -s -c /config/smb.conf abc
 
 COPY /app ./
 
