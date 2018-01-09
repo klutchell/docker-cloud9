@@ -1,0 +1,25 @@
+#!/bin/bash
+
+readonly ssh_config_dir="/data/.ssh"
+
+# create ssh config dir if it does not exist
+mkdir -p "${ssh_config_dir}" 2>/dev/null || true
+
+# generate id_rsa if it does not exist
+if [ ! -f "${ssh_config_dir}/id_rsa" ]
+then
+	ssh-keygen -q -t "rsa" -N '' -f "${ssh_config_dir}/id_rsa"
+fi
+
+# generate authorized_keys if it does not exist
+if [ ! -f "${ssh_config_dir}/authorized_keys" ]
+then
+	touch "${ssh_config_dir}/authorized_keys"
+fi
+
+# set permissions on ssh config dir
+chown -R ${SSH_USER}:${SSH_GROUP} "${ssh_config_dir}"
+chmod -R 700 "${ssh_config_dir}"
+
+# start multiple processes with supervisor
+supervisord -c /config/supervisord.conf
