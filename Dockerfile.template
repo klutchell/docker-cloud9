@@ -21,20 +21,24 @@ RUN /bin/echo -e "cloud9\ncloud9" | smbpasswd -a -s -c /config/smb.conf abc
 # create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
 
-WORKDIR /usr/src/app
-
 # https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
-
-# clone cloud9 sdk
-RUN git clone https://github.com/c9/core.git .
 
 # use custom uname so the install-sdk
 # script doesn't complain when building on resin
 RUN mv /bin/uname /bin/uname.orig && mv /root/uname.sh /bin/uname
 
+USER abc
+
+WORKDIR /usr/src/app
+
+# clone cloud9 sdk
+RUN git clone https://github.com/c9/core.git .
+
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
+
+USER root
 
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname

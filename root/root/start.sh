@@ -1,32 +1,33 @@
 #!/bin/bash
 
-readonly c9_workspace="/data/workspace"
-readonly ssh_config_dir="/data/.ssh"
+# move home directory and put link in original location
+if [ ! -d "/data/abc" ]
+then
+	mv "/home/abc" "/data/abc"
+	ln -s "/data/abc" "/home/abc"
+fi
 
-# create ssh config dir if it does not exist
-mkdir -p "${ssh_config_dir}" 2>/dev/null || true
+# create ssh dir if it does not exist
+if [ ! -d "/data/abc/.ssh" ]
+then
+	mkdir -p "/data/abc/.ssh"
+fi
 
 # generate id_rsa if it does not exist
-if [ ! -f "${ssh_config_dir}/id_rsa" ]
+if [ ! -f "/data/abc/.ssh/id_rsa" ]
 then
-	ssh-keygen -q -t "rsa" -N '' -f "${ssh_config_dir}/id_rsa"
+	ssh-keygen -q -t "rsa" -N '' -f "/data/abc/.ssh/id_rsa"
 fi
 
-# generate authorized_keys if it does not exist
-if [ ! -f "${ssh_config_dir}/authorized_keys" ]
+# touch authorized_keys if it does not exist
+if [ ! -f "/data/abc/.ssh/authorized_keys" ]
 then
-	touch "${ssh_config_dir}/authorized_keys"
+	touch "/data/abc/.ssh/authorized_keys"
 fi
 
-# set permissions on ssh config dir
-chown -R abc:abc "${ssh_config_dir}"
-chmod -R 700 "${ssh_config_dir}"
-
-if [ ! -d "${c9_workspace}" ]
-then
-	mkdir -p "${c9_workspace}"
-	chown -R abc:abc "${c9_workspace}"
-fi
+# set permissions on ssh dir
+chown -R abc:abc "/data/abc/.ssh"
+chmod -R 700 "/data/abc/.ssh"
 
 # start multiple processes with supervisor
 supervisord -c /config/supervisord.conf
