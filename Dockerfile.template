@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# install root scripts and config files
+COPY /root /
+
+# create sshd privilege separation directory
+RUN mkdir -p /var/run/sshd
+
 WORKDIR /usr/src/app
 
 # https://github.com/npm/uid-number/issues/3
@@ -28,9 +34,6 @@ RUN scripts/install-sdk.sh
 
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname
-
-# install smb and supervisor config files
-COPY *.conf /config/
 
 # create new user and group for samba and ssh access
 RUN groupadd -g 1000 abc && useradd -u 1000 -m -l -s /bin/bash -g abc abc
