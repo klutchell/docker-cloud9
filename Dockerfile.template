@@ -1,7 +1,4 @@
 FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
-# FROM resin/raspberrypi3-node:latest
-
-# RUN [ "cross-build-start" ]
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -14,26 +11,30 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /usr/src/app
 
-RUN mv /bin/uname /bin/uname.orig \
-    && echo '#!/bin/sh' > /bin/uname \
-    && echo '/bin/uname.orig $* | sed "s/armv8l/armv7l/"' >> /bin/uname \
-    && chmod +x /bin/uname
-
 # https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
 
 # clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
+# force uname to return armv7l instead of armv8l so the install-sdk
+# script doesn't complain when building on resin
+RUN mv /bin/uname /bin/uname.orig \
+    && /bin/echo -e '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > /bin/uname \
+    && chmod +x /bin/uname
+
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
+
+# restore original uname
+RUN mv /bin/uname.orig /bin/uname
 
 # install smb and supervisor config files
 COPY *.conf /config/
 
 # set a simple samba password for the root user
-# RUN echo -e "cloud\ncloud" | smbpasswd -a -s -c /config/smb.conf root
+RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /config/smb.conf root
 
+# run supervisor as main process
 CMD ["supervisord", "-c", "/config/supervisord.conf"]
 
-# RUN [ "cross-build-end" ]
