@@ -1,7 +1,7 @@
 # FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
 FROM resin/armv7hf-node:latest
 
-RUN [ "cross-build-start" ]
+# RUN [ "cross-build-start" ]
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -27,8 +27,8 @@ RUN scripts/install-sdk.sh
 COPY *.conf /config/
 
 # set a simple samba password for the root user
-RUN echo -e "cloud9\ncloud9" | smbpasswd -a -s -c /config/smb.conf root
+# RUN echo -e "cloud\ncloud" | smbpasswd -a -s -c /config/smb.conf root
 
 CMD ["supervisord", "-c", "/config/supervisord.conf"]
 
-RUN [ "cross-build-end" ]
+# RUN [ "cross-build-end" ]
