@@ -39,6 +39,4 @@ RUN scripts/install-sdk.sh
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname
 
-WORKDIR /home/abc
-
 CMD ["/bin/bash", "/root/start.sh"]
