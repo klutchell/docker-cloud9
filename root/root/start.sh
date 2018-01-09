@@ -13,6 +13,7 @@
 	touch "/data/.ssh/authorized_keys"
 
 # set permissions on ssh dir
+chown -R root:root "/data/.ssh"
 chmod -R 700 "/data/.ssh"
 
 # start multiple processes with supervisor
