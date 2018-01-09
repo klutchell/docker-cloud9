@@ -12,6 +12,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # install root scripts and config files
 COPY /root /
 
+# create new user and group for samba and ssh access
+RUN groupadd -g 1000 abc && useradd -u 1000 -m -l -s /bin/bash -g abc abc
+
+# set a simple samba password for the new user
+RUN /bin/echo -e "abc\nabc" | smbpasswd -a -s -c /config/smb.conf abc
+
 # create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
 
@@ -35,12 +41,4 @@ RUN scripts/install-sdk.sh
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname
 
-# create new user and group for samba and ssh access
-RUN groupadd -g 1000 abc && useradd -u 1000 -m -l -s /bin/bash -g abc abc
-
-# set a simple samba password for the new user
-RUN /bin/echo -e "abc\nabc" | smbpasswd -a -s -c /config/smb.conf abc
-
-COPY /app ./
-
-CMD ["/bin/bash", "start.sh"]
+CMD ["/bin/bash", "/root/start.sh"]
