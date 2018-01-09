@@ -15,11 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /usr/src/app
 
 RUN mv /bin/uname /bin/uname.orig \
-    && echo '#!/bin/sh' >> /bin/uname \
+    && echo '#!/bin/sh' > /bin/uname \
     && echo '/bin/uname.orig $* | sed "s/armv81/armv71/"' >> /bin/uname \
     && chmod +x /bin/uname
 
-RUN uname -m
+RUN which uname && cat /bin/uname && /bin/uname -m
 
 # https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
