@@ -1,6 +1,6 @@
 # resin-cloud9
 
-resin.io [cloud9](https://aws.amazon.com/cloud9/) application
+[resin.io](https://resin.io/) [cloud9](https://aws.amazon.com/cloud9/) application
 
 ## Getting Started
 
