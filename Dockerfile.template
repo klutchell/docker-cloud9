@@ -29,16 +29,17 @@ RUN npm config set unsafe-perm true
 # clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
-# force uname to return armv7l instead of armv8l so the install-sdk
+# use custom uname so the install-sdk
 # script doesn't complain when building on resin
 RUN mv /bin/uname /bin/uname.orig \
-    && /bin/echo -e '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > /bin/uname \
-    && chmod +x /bin/uname
+    && mv /root/uname.sh /bin/uname
 
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
 
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname
+
+WORKDIR /home/abc
 
 CMD ["/bin/bash", "/root/start.sh"]
