@@ -12,27 +12,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # install root scripts and config files
 COPY /root /
 
-# create new user and group for samba and ssh access
-RUN groupadd -g 1000 abc && useradd -u 1000 -m -l -s /bin/bash -g abc abc
-
-# set a simple samba password for the new user
-RUN /bin/echo -e "cloud9\ncloud9" | smbpasswd -a -s -c /config/smb.conf abc
+# set a simple samba password for the root user
+RUN /bin/echo -e "cloud9\ncloud9" | smbpasswd -a -s -c /config/smb.conf root
 
 # create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
 
-# https://github.com/npm/uid-number/issues/3
-RUN npm config set unsafe-perm true
+WORKDIR /usr/src/app
 
 # use custom uname so the install-sdk
 # script doesn't complain when building on resin
 RUN mv /bin/uname /bin/uname.orig && mv /root/uname.sh /bin/uname
 
-RUN mkdir -p /usr/src/app && chown abc:abc /usr/src/app
-
-USER abc
-
-WORKDIR /usr/src/app
+# https://github.com/npm/uid-number/issues/3
+RUN npm config set unsafe-perm true
 
 # clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
@@ -40,9 +33,9 @@ RUN git clone https://github.com/c9/core.git .
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
 
-USER root
-
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname
 
-CMD ["/bin/bash", "/root/start.sh"]
+WORKDIR /root
+
+CMD ["/bin/bash", "./start.sh"]
