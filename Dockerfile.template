@@ -20,7 +20,7 @@ RUN npm config set unsafe-perm true
 # clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
-RUN setarch -v armv71
+RUN setarch --list
 
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
