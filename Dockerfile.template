@@ -16,7 +16,7 @@ COPY /root /
 RUN groupadd -g 1000 abc && useradd -u 1000 -m -l -s /bin/bash -g abc abc
 
 # set a simple samba password for the new user
-RUN /bin/echo -e "abc\nabc" | smbpasswd -a -s -c /config/smb.conf abc
+RUN /bin/echo -e "cloud9\ncloud9" | smbpasswd -a -s -c /config/smb.conf abc
 
 # create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd

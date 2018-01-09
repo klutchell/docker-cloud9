@@ -1,5 +1,6 @@
 #!/bin/bash
 
+readonly c9_workspace="/data/workspace"
 readonly ssh_config_dir="/data/.ssh"
 
 # create ssh config dir if it does not exist
@@ -20,6 +21,12 @@ fi
 # set permissions on ssh config dir
 chown -R abc:abc "${ssh_config_dir}"
 chmod -R 700 "${ssh_config_dir}"
+
+if [ ! -d "${c9_workspace}" ]
+then
+	mkdir -p "${c9_workspace}"
+	chown -R abc:abc "${c9_workspace}"
+fi
 
 # start multiple processes with supervisor
 supervisord -c /config/supervisord.conf
