@@ -28,6 +28,8 @@ RUN npm config set unsafe-perm true
 # script doesn't complain when building on resin
 RUN mv /bin/uname /bin/uname.orig && mv /root/uname.sh /bin/uname
 
+RUN chown abc:abc /usr/src/app
+
 USER abc
 
 WORKDIR /usr/src/app
