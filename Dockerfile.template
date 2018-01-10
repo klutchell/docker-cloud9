@@ -22,7 +22,8 @@ WORKDIR /usr/src/app
 
 # use custom uname so the install-sdk
 # script doesn't complain when building on resin
-RUN mv /bin/uname /bin/uname.orig && mv /root/uname.sh /bin/uname
+RUN mv /bin/uname /bin/uname.orig
+COPY uname.armv7l /bin/uname
 
 # https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
@@ -36,6 +37,6 @@ RUN scripts/install-sdk.sh
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname
 
-WORKDIR /root
+WORKDIR /
 
-CMD ["/bin/bash", "./start.sh"]
+CMD ["/bin/bash", "/usr/local/bin/start.sh"]
