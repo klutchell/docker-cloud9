@@ -17,16 +17,12 @@ fi
 	cp -a "/root" "${home_dir}"
 
 # replace builtin home dir with link
-rm -rf /root
+mv /root /root.orig
 ln -s "${home_dir}" "/root"
 	
 # create ssh dir if it does not exist
 [ -d "${ssh_dir}" ] ||
 	mkdir -p "${ssh_dir}"
-
-# generate id_rsa if it does not exist
-[ -f "${ssh_dir}/id_rsa" ] ||
-	ssh-keygen -q -t "rsa" -N '' -f "${ssh_dir}/id_rsa"
 
 # touch authorized_keys if it does not exist
 [ -f "${ssh_dir}/authorized_keys" ] ||
@@ -37,4 +33,4 @@ chown -R root:root "${ssh_dir}"
 chmod -R 700 "${ssh_dir}"
 
 # start multiple processes with supervisor
-supervisord -c "/config/supervisord.conf"
+supervisord -c "/etc/supervisord.conf"

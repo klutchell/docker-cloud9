@@ -9,15 +9,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# install root scripts and config files
-COPY /root /
-
-# set a simple samba password for the root user
-RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /config/smb.conf root
-
-# create sshd privilege separation directory
-RUN mkdir -p /var/run/sshd
-
 WORKDIR /usr/src/app
 
 # use custom uname so the install-sdk
@@ -38,5 +29,14 @@ RUN scripts/install-sdk.sh
 RUN mv /bin/uname.orig /bin/uname
 
 WORKDIR /
+
+# install root filesystem overlay
+COPY /root /
+
+# set a simple samba password for the root user
+RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
+
+# create sshd privilege separation directory
+RUN mkdir -p /var/run/sshd
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
