@@ -13,8 +13,7 @@ WORKDIR /usr/src/app
 
 # use custom uname so the install-sdk
 # script doesn't complain when building on resin
-RUN mv /bin/uname /bin/uname.orig
-COPY uname.armv7l /bin/uname
+RUN mv /bin/uname /bin/uname.orig && mv /bin/uname.armv7l /bin/uname
 
 # https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
@@ -31,7 +30,7 @@ RUN mv /bin/uname.orig /bin/uname
 WORKDIR /
 
 # install root filesystem overlay
-COPY /root /
+COPY /root .
 
 # set a simple samba password for the root user
 RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
