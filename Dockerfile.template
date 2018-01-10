@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tmux \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    
+# install root filesystem overlay
+COPY /root /
 
 WORKDIR /usr/src/app
 
@@ -26,11 +29,6 @@ RUN scripts/install-sdk.sh
 
 # restore original uname
 RUN mv /bin/uname.orig /bin/uname
-
-WORKDIR /
-
-# install root filesystem overlay
-COPY /root .
 
 # set a simple samba password for the root user
 RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
