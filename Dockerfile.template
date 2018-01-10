@@ -14,7 +14,7 @@ COPY /root /
 
 ENV HOME_DIR /data/home
 ENV SAMBA_CONFIG /config/smb.conf
-ENV SUPERVISOR_CONFIG /config/supervisor.conf
+ENV SUPERVISOR_CONFIG /config/supervisord.conf
 ENV SSHD_CONFIG /config/sshd_config
 
 WORKDIR /usr/src/app
