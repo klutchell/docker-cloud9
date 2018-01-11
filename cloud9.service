@@ -2,11 +2,7 @@
 Description=cloud9
 
 [Service]
-ExecStart=/usr/local/bin/node server.js -w /data/home -p 8080 -l 0.0.0.0 -a root:resin
-Restart=always
-User=nobody
-Group=nobody
-WorkingDirectory=/usr/src/app
+ExecStart=/usr/local/bin/node /usr/src/app/server.js -w /data/home -p 8080 -l 0.0.0.0 -a root:resin
 
 [Install]
 WantedBy=multi-user.target
