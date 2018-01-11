@@ -5,6 +5,8 @@ Description=cloud9
 ExecStart=/usr/local/bin/node /usr/src/app/server.js -w /root -p 8080 -l 0.0.0.0 -a root:resin
 StandardOutput=journal+console
 StandardError=journal+console
+User=root
+Group=root
 
 [Install]
 WantedBy=multi-user.target

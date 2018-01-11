@@ -27,3 +27,4 @@ _tbd_
 
 * https://github.com/c9/install
 * https://github.com/pwntr/samba-alpine-docker
+* https://github.com/resin-io-projects/resin-openssh
