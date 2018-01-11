@@ -46,7 +46,7 @@ RUN npm install -g c9
 RUN mv /bin/uname.orig /bin/uname
 
 # set a simple samba password for the root user
-RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /config/smb.conf root
+RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
 
 # create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
