@@ -8,20 +8,12 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     git \
     openssh-server \
     samba \
-    supervisor \
     tmux \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
 # install root filesystem overlay
-# COPY /root /
-
-# install custom files
-COPY root/config/smb.conf /etc/samba/smb.conf
-COPY root/config/sshd_config /etc/ssh/sshd_config
-COPY cloud9.service /etc/systemd/system/cloud9.service
-COPY root/usr/local/bin/start.sh /usr/local/bin/start.sh
-COPY root/usr/local/bin/uname.armv7l /usr/local/bin/uname.armv7l
+COPY /root /
 
 WORKDIR /usr/src/app
 
@@ -52,8 +44,6 @@ RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
 RUN mkdir -p /var/run/sshd
 
 # enable services
-RUN systemctl enable ssh \
-    && systemctl enable smbd.service nmbd.service \
-    && systemctl enable cloud9
+RUN systemctl enable ssh smbd nmbd cloud9
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
