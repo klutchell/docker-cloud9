@@ -52,8 +52,8 @@ RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /config/smb.conf root
 RUN mkdir -p /var/run/sshd
 
 # enable services
-systemctl enable ssh
-systemctl enable smbd.service nmbd.service
-systemctl enable cloud9
+RUN systemctl enable ssh \
+    && systemctl enable smbd.service nmbd.service \
+    && systemctl enable cloud9
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
