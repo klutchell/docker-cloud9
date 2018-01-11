@@ -8,4 +8,4 @@ mv "/root" "/root.orig"
 ln -s "/data/home" "/root"
 
 # start multiple processes with supervisor
-supervisord -c "/config/supervisord.conf"
+# supervisord -c "/config/supervisord.conf"

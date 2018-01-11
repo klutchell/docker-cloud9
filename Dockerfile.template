@@ -1,5 +1,8 @@
 FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
 
+# enable container init system.
+ENV INITSYSTEM on
+
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     bash-completion \
     git \
@@ -11,7 +14,14 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
 # install root filesystem overlay
-COPY /root /
+# COPY /root /
+
+# install custom files
+COPY root/config/smb.conf /etc/samba/smb.conf
+COPY root/config/sshd_config /etc/ssh/sshd_config
+COPY cloud9.service /etc/systemd/system/cloud9.service
+COPY root/usr/local/bin/start.sh /usr/local/bin/start.sh
+COPY root/usr/local/bin/uname.armv7l /usr/local/bin/uname.armv7l
 
 WORKDIR /usr/src/app
 
@@ -40,5 +50,10 @@ RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /config/smb.conf root
 
 # create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
+
+# enable services
+systemctl enable ssh
+systemctl enable smbd.service nmbd.service
+systemctl enable cloud9
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
