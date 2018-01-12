@@ -1,0 +1,11 @@
+[Unit]
+Description = External USB Storage
+
+[Mount]
+What = LABEL=ext4-128g
+Where = /mnt/storage
+Type = ext4
+Options = rw,relatime,data=ordered
+
+[Install]
+WantedBy = multi-user.target
