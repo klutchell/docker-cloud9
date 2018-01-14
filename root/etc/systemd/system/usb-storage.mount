@@ -3,7 +3,7 @@ Description = External USB Storage
 
 [Mount]
 What = LABEL=ext4-128g
-Where = /mnt/storage
+Where = /usb-storage
 Type = ext4
 Options = rw,relatime,data=ordered
 
