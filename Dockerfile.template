@@ -8,6 +8,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     bash-completion \
     git \
     openssh-server \
+    rsnapshot \
     samba \
     tmux \
     && apt-get clean \
@@ -44,6 +45,10 @@ RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
 RUN mkdir -p /var/run/sshd
 
 # 13. enable ssh samba cloud9 services
-RUN systemctl enable ssh smbd nmbd cloud9
+RUN systemctl enable ssh smbd nmbd cloud9.service usb-storage.mount
+
+# 14. install rsub (rmate) for remote ide
+RUN curl -sL "https://raw.github.com/aurora/rmate/master/rmate" > "/usr/local/bin/rsub" \
+    && chmod +x /usr/local/bin/rsub
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
