@@ -1,11 +1,29 @@
 #!/bin/bash
 
-# link to custom home dir if it exists
-if [ -d "/data/home" ]
+readonly HOME="/data/home"
+readonly C9_WORKSPACE="/data/workspace"
+
+# create a new home dir from the one in the image
+if [ ! -d "${HOME}" ]
 then
-    echo "using persistent home directory: /data/home"
-    mv "/root" "/root.orig"
-    ln -s "/data/home" "/root"
-else
-    echo "using image home directory: /root"
+    cp -a "/root" "${HOME}"
 fi
+
+# backup the image home dir and link to the new home dir
+mv "/root" "/root.orig"
+ln -s "${HOME}" "/root"
+
+# generate ssh key if one does not exist
+if [ ! -f "${HOME}/.ssh/id_rsa" ]
+then
+	ssh-keygen -q -t "rsa" -N '' -f "${HOME}/.ssh/id_rsa" -C "$(id -un)@$(hostname) $(date)"
+fi
+
+# create c9 workspace if it doesn't exist
+if [ ! -d "${C9_WORKSPACE}" ]
+then
+    mkdir -p "${C9_WORKSPACE}"
+fi
+
+# generate host keys
+/usr/bin/ssh-keygen -A
