@@ -27,3 +27,8 @@ fi
 
 # generate host keys
 /usr/bin/ssh-keygen -A
+
+# manually start services
+systemctl start ssh
+systemctl start smbd nmbd
+systemctl start cloud9.service

@@ -43,7 +43,4 @@ RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
 # 12. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
 
-# 13. enable ssh samba cloud9 services
-RUN systemctl enable ssh smbd nmbd cloud9.service
-
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
