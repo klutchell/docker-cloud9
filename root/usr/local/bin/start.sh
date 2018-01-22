@@ -6,7 +6,7 @@ readonly C9_WORKSPACE="/data/workspace"
 # create a new home dir from the one in the image
 if [ ! -d "${HOME}" ]
 then
-    cp -a "/root" "${HOME}"
+	cp -a "/root" "${HOME}"
 fi
 
 # backup the image home dir and link to the new home dir
@@ -22,7 +22,7 @@ fi
 # create c9 workspace if it doesn't exist
 if [ ! -d "${C9_WORKSPACE}" ]
 then
-    mkdir -p "${C9_WORKSPACE}"
+	mkdir -p "${C9_WORKSPACE}"
 fi
 
 # generate host keys
