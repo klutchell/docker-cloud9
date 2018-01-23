@@ -1,22 +1,23 @@
 #!/bin/bash
 
-readonly HOME="/data/home"
+readonly PERSIST_HOME="/data/home"
 readonly C9_WORKSPACE="/data/workspace"
 
-# create a new home dir from the one in the image
-if [ ! -d "${HOME}" ]
+# skip this step if /root is already a link
+if [ ! -L "/root" ]
 then
-	cp -a "/root" "${HOME}"
+	# create a persistent home dir from the one in the image
+	[ ! -d "${PERSIST_HOME}" ] && cp -a "/root" "${PERSIST_HOME}"
+	
+	# backup the image home dir and link to the persistent home dir
+	mv "/root" "/root.orig"
+	ln -s "${PERSIST_HOME}" "/root"
 fi
 
-# backup the image home dir and link to the new home dir
-mv "/root" "/root.orig"
-ln -s "${HOME}" "/root"
-
 # generate ssh key if one does not exist
-if [ ! -f "${HOME}/.ssh/id_rsa" ]
+if [ ! -f "${PERSIST_HOME}/.ssh/id_rsa" ]
 then
-	ssh-keygen -q -t "rsa" -N '' -f "${HOME}/.ssh/id_rsa" -C "$(id -un)@$(hostname) $(date)"
+	ssh-keygen -q -t "rsa" -N '' -f "${PERSIST_HOME}/.ssh/id_rsa" -C "$(id -un)@$(hostname) $(date)"
 fi
 
 # create c9 workspace if it doesn't exist
