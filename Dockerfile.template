@@ -8,7 +8,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     bash-completion \
     git \
     openssh-server \
-    samba \
     tmux \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -37,10 +36,7 @@ RUN mv /bin/uname /bin/uname.orig \
 # 10. install c9 to open files in editor via terminal
 RUN npm install -g c9
 
-# 11. set a simple samba password for the root user
-RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
-
-# 12. create sshd privilege separation directory
+# 11. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
