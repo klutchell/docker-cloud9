@@ -8,6 +8,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     bash-completion \
     git \
     openssh-server \
+    rsync \
     sshfs \
     tmux \
     && apt-get clean \
