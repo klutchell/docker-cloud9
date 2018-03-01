@@ -28,7 +28,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 
 # 4. add docker-ce repo
 RUN curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | apt-key add - \
-    && echo "deb [arch=armhf] https://download.docker.com/linux/raspbian jessie edge" > /etc/apt/sources.list.d/docker.list
+    && echo "deb [arch=armhf] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $(lsb_release -cs) stable" | \
+    tee /etc/apt/sources.list.d/docker.list
     
 # 5. install docker-ce
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
