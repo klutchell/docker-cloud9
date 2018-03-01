@@ -7,11 +7,7 @@ ENV INITSYSTEM on
 RUN cp "$(which uname)" "/bin/uname.orig" \
     && echo '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > "$(which uname)"
 
-# 3. install docker-ce repo
-RUN curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | apt-key add - \
-    && echo "deb [arch=armhf] https://download.docker.com/linux/raspbian jessie edge" > /etc/apt/sources.list.d/docker.list
-
-# 4. install updates and utilities
+# 3. install updates and utilities
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     bash-completion \
     git \
@@ -22,29 +18,43 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     module-init-tools \
     aufs-tools \
     shellcheck \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# 4. add docker-ce repo
+RUN curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | apt-key add - \
+    && echo "deb [arch=armhf] https://download.docker.com/linux/raspbian jessie edge" > /etc/apt/sources.list.d/docker.list
+    
+# 5. install docker-ce
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     docker-ce \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    
-# 5. install root filesystem overlay
+
+# 6. install root filesystem overlay
 COPY /root /
 
-# 6. work in destination dir for cloud9
+# 7. work in destination dir for cloud9
 WORKDIR /usr/src/app
 
-# 7. fix npm errors: https://github.com/npm/uid-number/issues/3
+# 8. fix npm errors: https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
 
-# 8. clone cloud9 sdk
+# 9. clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
-# 9. install cloud9 sdk
+# 10. install cloud9 sdk
 RUN scripts/install-sdk.sh
 
-# 10. install c9 to open files in editor via terminal
+# 11. install c9 to open files in editor via terminal
 RUN npm install -g c9
 
-# 11. create sshd privilege separation directory
+# 12. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
