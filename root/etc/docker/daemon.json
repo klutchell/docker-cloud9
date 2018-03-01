@@ -1,6 +1,0 @@
-{
-  "storage-driver": "aufs",
-  "graph": "/data/docker",
-  "dns": ["8.8.8.8"],
-  "iptables": false
-}

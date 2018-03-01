@@ -15,8 +15,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     rsync \
     sshfs \
     tmux \
-    module-init-tools \
-    aufs-tools \
     shellcheck \
     apt-transport-https \
     ca-certificates \
@@ -40,20 +38,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # 6. install root filesystem overlay
 COPY /root /
 
-# 7. work in destination dir for cloud9
+# 7. use custom docker.service file
+RUN rm /lib/systemd/system/docker.service
+
+# 8. work in destination dir for cloud9
 WORKDIR /usr/src/app
 
-# 8. fix npm errors: https://github.com/npm/uid-number/issues/3
+# 9. fix npm errors: https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
 
-# 9. clone cloud9 sdk
+# 10. clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
-# 10. install cloud9 sdk
+# 11. install cloud9 sdk
 RUN scripts/install-sdk.sh
-
-# 11. install c9 to open files in editor via terminal
-RUN npm install -g c9
 
 # 12. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
