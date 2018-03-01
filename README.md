@@ -9,7 +9,9 @@
 
 ## Deployment
 
-_tbd_
+```bash
+git push resin master
+```
 
 ## Usage
 

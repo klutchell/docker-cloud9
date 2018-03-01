@@ -1,49 +1,44 @@
 FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
 
-# enable container init system.
+# 1. enable container init system.
 ENV INITSYSTEM on
 
+# 2. install updates, git, sshd, samba, tmux
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     bash-completion \
     git \
     openssh-server \
-    samba \
+    rsync \
+    sshfs \
     tmux \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-# install root filesystem overlay
+# 3. install root filesystem overlay
 COPY /root /
 
+# 4. work in destination dir for cloud9
 WORKDIR /usr/src/app
 
-# use custom uname so the install-sdk
-# script doesn't complain when building on resin
-RUN mv /bin/uname /bin/uname.orig \
-    && mv /usr/local/bin/uname.armv7l /bin/uname
-
+# 5. fix npm errors
 # https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
 
-# clone cloud9 sdk
+# 6. clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
-# install cloud9 sdk
-RUN scripts/install-sdk.sh
+# 7. install custom uname so the install script doesn't complain when building on armv8l
+# 8. install cloud9 sdk
+# 9. restore original uname
+RUN mv /bin/uname /bin/uname.orig \
+    && mv /bin/uname.armv7l /bin/uname \
+    && scripts/install-sdk.sh \
+    && mv /bin/uname.orig /bin/uname
 
-# install c9 to open files in editor via terminal
+# 10. install c9 to open files in editor via terminal
 RUN npm install -g c9
 
-# restore original uname
-RUN mv /bin/uname.orig /bin/uname
-
-# set a simple samba password for the root user
-RUN /bin/echo -e "resin\nresin" | smbpasswd -a -s -c /etc/samba/smb.conf root
-
-# create sshd privilege separation directory
+# 11. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
-
-# enable services
-RUN systemctl enable ssh smbd nmbd cloud9
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
