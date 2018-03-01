@@ -7,7 +7,11 @@ ENV INITSYSTEM on
 RUN cp "$(which uname)" "/bin/uname.orig" \
     && echo '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > "$(which uname)"
 
-# 3. install updates and utilities
+# 3. install docker-ce repo
+RUN curl -fsSL "https://download.docker.com/linux/raspbian/gpg" | apt-key add \
+    && echo "deb [arch=armhf] https://download.docker.com/linux/raspbian jessie edge" > /etc/apt/sources.list.d/docker.list
+
+# 4. install updates and utilities
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     bash-completion \
     git \
@@ -18,31 +22,29 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     module-init-tools \
     aufs-tools \
     shellcheck \
+    docker-ce \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-# 4. install root filesystem overlay
+# 5. install root filesystem overlay
 COPY /root /
 
-# 5. work in destination dir for cloud9
+# 6. work in destination dir for cloud9
 WORKDIR /usr/src/app
 
-# 6. fix npm errors: https://github.com/npm/uid-number/issues/3
+# 7. fix npm errors: https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
 
-# 7. clone cloud9 sdk
+# 8. clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
-# 8. install cloud9 sdk
+# 9. install cloud9 sdk
 RUN scripts/install-sdk.sh
 
-# 9. install c9 to open files in editor via terminal
+# 10. install c9 to open files in editor via terminal
 RUN npm install -g c9
 
-# 10. create sshd privilege separation directory
+# 11. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
-
-# 11. install docker
-RUN curl -sSL https://get.docker.com/ | sh
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
