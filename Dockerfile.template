@@ -3,7 +3,11 @@ FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
 # 1. enable container init system.
 ENV INITSYSTEM on
 
-# 2. install updates, git, sshd, samba, tmux
+# 2. set the correct uname for rpi3
+RUN cp "$(which uname)" "/bin/uname.orig" \
+    && echo '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > "$(which uname)"
+
+# 3. install updates, git, sshd, samba, tmux
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     bash-completion \
     git \
@@ -11,34 +15,31 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     rsync \
     sshfs \
     tmux \
+    docker.io \
+    module-init-tools \
+    aufs-tools \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
-# 3. install root filesystem overlay
+# 4. install root filesystem overlay
 COPY /root /
 
-# 4. work in destination dir for cloud9
+# 5. work in destination dir for cloud9
 WORKDIR /usr/src/app
 
-# 5. fix npm errors
-# https://github.com/npm/uid-number/issues/3
+# 6. fix npm errors: https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
 
-# 6. clone cloud9 sdk
+# 7. clone cloud9 sdk
 RUN git clone https://github.com/c9/core.git .
 
-# 7. install custom uname so the install script doesn't complain when building on armv8l
 # 8. install cloud9 sdk
-# 9. restore original uname
-RUN mv /bin/uname /bin/uname.orig \
-    && mv /bin/uname.armv7l /bin/uname \
-    && scripts/install-sdk.sh \
-    && mv /bin/uname.orig /bin/uname
+RUN scripts/install-sdk.sh
 
-# 10. install c9 to open files in editor via terminal
+# 9. install c9 to open files in editor via terminal
 RUN npm install -g c9
 
-# 11. create sshd privilege separation directory
+# 10. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]

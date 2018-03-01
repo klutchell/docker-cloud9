@@ -1,29 +1,37 @@
 #!/bin/bash
 
-readonly PERSIST_HOME="/data/home"
-readonly C9_WORKSPACE="/data/workspace"
-
-# skip this step if /root is already a link
-if [ ! -L "/root" ]
+# create persistent ssh dir if it doesn't exist
+if [ ! -d "/data/.ssh" ]
 then
-	# create a persistent home dir from the one in the image
-	[ ! -d "${PERSIST_HOME}" ] && cp -a "/root" "${PERSIST_HOME}"
-	
-	# backup the image home dir and link to the persistent home dir
-	mv "/root" "/root.orig"
-	ln -s "${PERSIST_HOME}" "/root"
-fi
-
-# generate ssh key if one does not exist
-if [ ! -f "${PERSIST_HOME}/.ssh/id_rsa" ]
-then
-	ssh-keygen -q -t "rsa" -N '' -f "${PERSIST_HOME}/.ssh/id_rsa" -C "$(id -un)@$(hostname) $(date)"
+	mkdir -p "/data/.ssh"
 fi
 
 # create c9 workspace if it doesn't exist
-if [ ! -d "${C9_WORKSPACE}" ]
+if [ ! -d "/data/workspace" ]
 then
-	mkdir -p "${C9_WORKSPACE}"
+	mkdir -p "/data/workspace"
+fi
+
+# create docker root if it doesn't exist
+if [ ! -d "/data/docker" ]
+then
+	mkdir -p "/data/docker"
+fi
+
+# generate ssh key if one does not exist
+if [ ! -f "/root/.ssh/id_rsa" ]
+then
+	ssh-keygen -q -t "rsa" -N '' -f "/root/.ssh/id_rsa" -C "$(id -un)@$(hostname) $(date)"
+fi
+
+# set permissions on ssh dir
+chown -R root:root "/data/.ssh"
+chmod -R 700 "/data/.ssh"
+
+# link to persistent ssh dir
+if [ ! -L "/root/.ssh" ]
+then
+	ln -s "/data/.ssh" "/root/.ssh"
 fi
 
 # generate host keys
@@ -32,3 +40,7 @@ fi
 # manually start services
 systemctl start ssh
 systemctl start cloud9.service
+systemctl start docker
+
+# remove unused containers, images, and networks
+docker system prune -f
