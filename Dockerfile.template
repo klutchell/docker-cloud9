@@ -15,7 +15,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     rsync \
     sshfs \
     tmux \
-    docker.io \
     module-init-tools \
     aufs-tools \
     shellcheck \
@@ -42,5 +41,8 @@ RUN npm install -g c9
 
 # 10. create sshd privilege separation directory
 RUN mkdir -p /var/run/sshd
+
+# 11. install docker
+RUN curl -sSL https://get.docker.com/ | sh
 
 CMD ["/bin/bash", "/usr/local/bin/start.sh"]
