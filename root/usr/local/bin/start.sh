@@ -37,6 +37,12 @@ then
 	mkdir -p "/data/docker"
 fi
 
+# Default to UTC if no TIMEZONE env variable is set
+echo "setting time zone to ${TIMEZONE=UTC}"
+# This only works on Debian-based images
+echo "${TIMEZONE}" > /etc/timezone
+dpkg-reconfigure tzdata
+
 # manually start services
 systemctl start ssh
 systemctl start docker
