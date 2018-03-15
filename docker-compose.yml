@@ -1,11 +1,19 @@
 version: '2'
 volumes: 
-  cloud9-data:
+  cloud9-workspace:
+  ssh-data:
 services:
   cloud9:
     build: ./cloud9
     ports:
-      - '1880:1880'
+      - '80:80'
+    volumes: 
+      - 'cloud9-workspace:/workspace'
+      - 'ssh-data:/root/.ssh'
+  ssh:
+    build: ./ssh
+    ports:
       - '22:22'
     volumes: 
-      - 'cloud9-data:/data'
+      - 'cloud9-workspace:/workspace'
+      - 'ssh-data:/root/.ssh'

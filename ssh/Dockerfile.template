@@ -1,0 +1,20 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-alpine:latest
+
+# enable container init system
+# ENV INITSYSTEM on
+
+# install git, openssh, and rsync
+RUN apk add --no-cache \
+	git \
+	git-bash-completion \
+	openssh \
+	rsync
+
+# install filesystem overlay
+COPY . ./
+
+# set timezone
+RUN apk add --no-cache tzdata
+ENV TZ=America/Toronto
+
+CMD ["/bin/bash", "start.sh"]
