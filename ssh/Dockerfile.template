@@ -10,6 +10,12 @@ RUN apk add --no-cache \
 # install filesystem overlay
 COPY . ./
 
+# adjust sshd config
+RUN sed -i \
+    -e 's/#PasswordAuthentication yes/PasswordAuthentication no/' \
+    -e 's/#GatewayPorts no/GatewayPorts yes/' \
+    /etc/ssh/sshd_config
+
 # set timezone
 RUN apk add --no-cache tzdata
 ENV TZ=America/Toronto
