@@ -6,10 +6,11 @@ services:
   cloud9:
     build: ./cloud9
     ports:
-      - '80:80'
+      - '8181:8181'
     volumes: 
       - 'cloud9-workspace:/workspace'
       - 'ssh-data:/root/.ssh'
+    working_dir: /workspace
   ssh:
     build: ./ssh
     ports:
@@ -17,3 +18,4 @@ services:
     volumes: 
       - 'cloud9-workspace:/workspace'
       - 'ssh-data:/root/.ssh'
+    working_dir: /workspace
