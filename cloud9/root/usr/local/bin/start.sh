@@ -31,12 +31,6 @@ then
 	mkdir -p "/data/workspace"
 fi
 
-# create docker root if it doesn't exist
-if [ ! -d "/data/docker" ]
-then
-	mkdir -p "/data/docker"
-fi
-
 # Default to UTC if no TIMEZONE env variable is set
 echo "setting time zone to ${TIMEZONE=UTC}"
 # This only works on Debian-based images
@@ -45,6 +39,5 @@ dpkg-reconfigure tzdata
 
 # manually start services
 systemctl start ssh
-systemctl start docker
 systemctl start cloud9.service
 
