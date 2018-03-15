@@ -10,8 +10,7 @@ services:
     volumes: 
       - 'cloud9-workspace:/workspace'
       - 'ssh-data:/root/.ssh'
-    command: ["/bin/node", "/cloud9/server.js", "-p", "8181", "-w", "/workspace", "-l", "0.0.0.0", "-a", ":"]
-    working_dir: /workspace
+    command: ["node", "server.js", "-p", "8181", "-w", "/workspace", "-l", "0.0.0.0", "-a", ":"]
   ssh:
     build: ./ssh
     ports:
