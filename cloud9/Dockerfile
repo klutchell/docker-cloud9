@@ -2,6 +2,14 @@ FROM kdelfour/cloud9-docker:latest
 
 # set timezone
 ENV TZ=America/Toronto
-RUN echo $TZ > /etc/timezone && dpkg-reconfigure tzdata || true
+RUN echo $TZ > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
 # ENV TZ=America/Toronto
 # RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# ENV TZ 'Europe/Tallinn'
+# RUN echo $TZ > /etc/timezone && \
+#     apt-get update && apt-get install -y tzdata && \
+#     rm /etc/localtime && \
+#     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+#     dpkg-reconfigure -f noninteractive tzdata && \
+#     apt-get clean
