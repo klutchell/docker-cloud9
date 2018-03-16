@@ -1,11 +1,11 @@
 # resin-cloud9
 
-[resin.io](https://resin.io/) [cloud9](https://aws.amazon.com/cloud9/) application
+[resin.io](https://resin.io/) cloud9 application
 
 ## Getting Started
 
-* https://docs.resin.io/raspberrypi3/nodejs/getting-started
-* https://docs.aws.amazon.com/cloud9/latest/user-guide/get-started.html
+* https://docs.resin.io/learn/getting-started
+* https://docs.c9.io/docs/getting-started
 
 ## Deployment
 
@@ -15,8 +15,8 @@ git push resin master
 
 ## Usage
 
-* https://docs.resin.io/runtime/runtime/
-* https://docs.aws.amazon.com/cloud9/latest/user-guide/environments.html
+* root@<device-ipaddress>:22 for secure shell
+* http://<device-ipaddress>:8080 for cloud9 workspace
 
 ## Author
 
@@ -29,5 +29,5 @@ _tbd_
 ## Acknowledgments
 
 * https://github.com/c9/install
-* https://github.com/pwntr/samba-alpine-docker
+* https://github.com/hwegge2/rpi-cloud9-ide
 * https://github.com/resin-io-projects/resin-openssh

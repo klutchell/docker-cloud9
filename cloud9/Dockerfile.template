@@ -32,9 +32,6 @@ RUN git clone https://github.com/c9/core.git .
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
 
-# set workspace
-WORKDIR $C9_WORKSPACE
-
 # set timezone
 RUN echo $TZ > /etc/timezone && dpkg-reconfigure tzdata
 
