@@ -17,8 +17,8 @@ git push resin master
 
 ## Usage
 
-* root@<device-ipaddress>:22 for secure shell
-* http://<device-ipaddress>:8080 for cloud9 ide
+* root@your-device-ip:22 for secure shell
+* http://your-device-ip:8080 for cloud9 ide
 
 ## Author
 
