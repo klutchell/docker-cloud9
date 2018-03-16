@@ -20,7 +20,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# destination dir for cloud9
+# work in destination dir for cloud9
 WORKDIR /usr/src/app
 
 # fix npm errors: https://github.com/npm/uid-number/issues/3
@@ -32,7 +32,10 @@ RUN git clone https://github.com/c9/core.git .
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
 
-# workspace
+# set default workspace
+ENV C9_WORKSPACE /workspace
+
+# work in default workspace
 WORKDIR /workspace
 
 CMD ["/usr/local/bin/node", "/usr/src/app/server.js", "-p", "8181", "-w", "/workspace", "-l", "0.0.0.0", "-a", "root:resin"]
