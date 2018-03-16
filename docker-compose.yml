@@ -6,7 +6,7 @@ services:
   cloud9:
     build: ./cloud9
     ports:
-      - '8181:8181'
+      - '8080:8080'
     volumes: 
       - 'cloud9-workspace:/workspace'
       - 'ssh-data:/root/.ssh'

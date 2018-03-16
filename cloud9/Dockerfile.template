@@ -1,15 +1,11 @@
 FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
 
-# set timezone
-ENV TZ=America/Toronto
-RUN echo $TZ > /etc/timezone && dpkg-reconfigure tzdata
-
 # set the correct uname for rpi3
 RUN cp "$(which uname)" "/bin/uname.orig" \
 	&& echo '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > "$(which uname)"
 
 # install updates and common utilities
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y --no-install-recommends \
 	apt-transport-https \
 	bash-completion \
 	ca-certificates \
@@ -38,4 +34,8 @@ ENV C9_WORKSPACE /workspace
 # work in default workspace
 WORKDIR /workspace
 
-CMD ["/usr/local/bin/node", "/usr/src/app/server.js", "-p", "8181", "-w", "/workspace", "-l", "0.0.0.0", "-a", "root:resin"]
+# set timezone
+ENV TZ=America/Toronto
+RUN echo $TZ > /etc/timezone && dpkg-reconfigure tzdata
+
+CMD ["/usr/local/bin/node", "/usr/src/app/server.js", "-p", "8080", "-w", "/workspace", "-l", "0.0.0.0", "-a", "root:resin"]
