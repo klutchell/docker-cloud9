@@ -1,6 +1,8 @@
 # resin-cloud9
 
-[resin.io](https://resin.io/) cloud9 application
+[resin.io](https://resin.io/) stack with the following services:
+* cloud9 ide
+* secure shell
 
 ## Getting Started
 
@@ -16,7 +18,7 @@ git push resin master
 ## Usage
 
 * root@<device-ipaddress>:22 for secure shell
-* http://<device-ipaddress>:8080 for cloud9 workspace
+* http://<device-ipaddress>:8080 for cloud9 ide
 
 ## Author
 
