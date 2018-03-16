@@ -1,5 +1,9 @@
 FROM resin/%%RESIN_MACHINE_NAME%%-node:latest
 
+# set defaults
+ENV C9_WORKSPACE /workspace
+ENV TZ America/Toronto
+
 # set the correct uname for rpi3
 RUN cp "$(which uname)" "/bin/uname.orig" \
 	&& echo '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > "$(which uname)"
@@ -16,26 +20,22 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y --no-install
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# work in destination dir for cloud9
+# work in app dir for cloud9
 WORKDIR /usr/src/app
 
 # fix npm errors: https://github.com/npm/uid-number/issues/3
 RUN npm config set unsafe-perm true
 
-# clone cloud9 sdk
+# clone cloud9 core
 RUN git clone https://github.com/c9/core.git .
 
 # install cloud9 sdk
 RUN scripts/install-sdk.sh
 
-# set default workspace
-ENV C9_WORKSPACE /workspace
-
-# work in default workspace
-WORKDIR /workspace
+# set workspace
+WORKDIR $C9_WORKSPACE
 
 # set timezone
-ENV TZ=America/Toronto
 RUN echo $TZ > /etc/timezone && dpkg-reconfigure tzdata
 
-CMD ["/usr/local/bin/node", "/usr/src/app/server.js", "-p", "8080", "-w", "/workspace", "-l", "0.0.0.0", "-a", "root:resin"]
+CMD ["/usr/local/bin/node", "/usr/src/app/server.js", "-p", "8080", "-w", "$C9_WORKSPACE", "-l", "0.0.0.0", "-a", "root:resin"]
