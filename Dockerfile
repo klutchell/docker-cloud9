@@ -3,9 +3,7 @@ FROM resin/raspberrypi3-node
 LABEL maintainer="kylemharding@gmail.com"
 
 # allow building on x86
-RUN if [ -z "$(uname -m | grep 'arm')" ] ; \
-	then cross-build-start ; \
-	fi
+RUN [ "cross-build-start" ]
 
 # set the correct uname for rpi3
 RUN cp "$(which uname)" "/bin/uname.orig" \
@@ -39,11 +37,9 @@ VOLUME ${C9_WORKSPACE}
 # install start script
 COPY start.sh /usr/bin/start.sh
 
-# run start script
+# run start script on boot
 CMD [ "/usr/bin/start.sh" ]
 
 # end cross build
-RUN if [ -z "$(uname -m | grep 'arm')" ] ; \
-	then cross-build-end ; \
-	fi
+RUN [ "cross-build-end" ]
 
