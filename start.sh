@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # create ssh dir if it doesn't exist
 if [ ! -d "${HOME}/.ssh" ]
@@ -10,6 +10,18 @@ fi
 if [ ! -f "${HOME}/.ssh/id_rsa" ]
 then
 	ssh-keygen -q -t "rsa" -N '' -f "${HOME}/.ssh/id_rsa" -C "$(id -un)@$(hostname) $(date)"
+fi
+
+# generate ssh config file to prevent caching known hosts
+if [ ! -f "${HOME}/.ssh/config" ]
+then
+	cat <<EOF >> "${HOME}/.ssh/config"
+
+Host *
+	StrictHostKeyChecking no
+	UserKnownHostsFile /dev/null"
+
+EOF
 fi
 
 # set permissions on ssh dir
