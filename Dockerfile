@@ -1,5 +1,7 @@
 FROM resin/raspberrypi3-node
 
+LABEL maintainer="kylemharding@gmail.com"
+
 # allow building on x86
 RUN [ "cross-build-start" ]
 
