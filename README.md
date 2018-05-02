@@ -1,6 +1,6 @@
 # resin-cloud9
 
-[cloud9 ide](https://c9.io/) service for [resin.io](https://resin.io/) stacks.
+[cloud9 ide](https://c9.io/) service for [resin.io](https://resin.io/) stacks
 
 ## Getting Started
 
@@ -9,29 +9,17 @@
 
 ## Deployment
 
-```yaml
-# example docker-compose.yml
-version: '2.1'
-
-volumes:
-  cloud9-data:
-
-services:
-  cloud9:
-    build: ./cloud9
-    ports:
-      - '8080:8080'
-    volumes:
-      - 'cloud9-data:/data'
+```bash
+docker run --name cloud9 \
+-v cloud9-workspace:/cloud9-workspace \
+-p 8080:8080 \
+-e TZ=America/Toronto \
+klutchell/resin-cloud9
 ```
 
 ## Usage
 
-1. access the web IDE via port `8080`:
-```bash
-# example
-http://192.168.1.101:8080/
-```
+browse to `http://<device-ip>:8080` to access the web IDE
 
 ## Author
 
