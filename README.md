@@ -11,7 +11,7 @@
 
 ```bash
 docker run --name cloud9 \
--v cloud9-workspace:/cloud9-workspace \
+-v cloud9-workspace:/workspace \
 -p 8080:8080 \
 -e TZ=America/Toronto \
 klutchell/resin-cloud9
