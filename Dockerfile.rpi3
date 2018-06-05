@@ -23,7 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 WORKDIR /usr/src/app
 
 # clone & install cloud9 core 
-RUN git clone https://github.com/c9/core.git . \
+RUN git clone --depth 1 https://github.com/c9/core.git . \
 	&& npm config set unsafe-perm true \
 	&& scripts/install-sdk.sh
 
