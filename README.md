@@ -1,13 +1,10 @@
-# klutchell/cloud9
+# docker-cloud9
 
 [cloud9](https://c9.io/) docker images
 
 ## Build
 
 ```bash
-# build default
-make
-
 # build for rpi3
 make build-rpi3
 ```
@@ -15,19 +12,20 @@ make build-rpi3
 ## Deploy
 
 ```bash
+# deploy on rpi3
 docker run --name cloud9 \
 -v cloud9-data:/root/.c9 \
 -v cloud9-workspace:/workspace \
 -p 8080:8080 \
 -e TZ=America/Toronto \
-klutchell/cloud9:latest
+klutchell/cloud9:rpi3-latest
 ```
 
 ## Parameters
 
 * `-v cloud9-data:/root/.c9` - persistent data volume
 * `-v cloud9-workspace:/workspace` - persistent workspace volume
-* `-p 8080:8080` - port to expose
+* `-p 8080:8080` - ports to expose
 * `-e TZ=America/Toronto` - local timezone
 
 ## Usage
