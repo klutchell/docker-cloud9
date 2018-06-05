@@ -2,19 +2,23 @@
 
 [cloud9 ide](https://c9.io/) service for [resin.io](https://resin.io/) stacks
 
-## Getting Started
+## Build
 
-* https://docs.resin.io/learn/getting-started
-* https://docs.c9.io/docs/getting-started
+```bash
+make build
+docker login
+make push
+```
 
-## Deployment
+## Deploy
 
 ```bash
 docker run --name cloud9 \
+-v cloud9-date:/root/.c9 \
 -v cloud9-workspace:/workspace \
 -p 8080:8080 \
 -e TZ=America/Toronto \
-klutchell/resin-cloud9
+klutchell/resin-cloud9:latest
 ```
 
 ## Usage
