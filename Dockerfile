@@ -1,24 +1,21 @@
-FROM resin/raspberrypi3-node
+FROM resin/raspberrypi3-node:8.11.2
 
 LABEL maintainer="kylemharding@gmail.com"
 
 # allow building on x86
 RUN [ "cross-build-start" ]
 
-# set some c9 variables that can be overridden
+# avoid debconf warnings
+ENV DEBIAN_FRONTEND noninteractive
+
+# set c9 workspace and port
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
-
-# set the correct uname for rpi3
-RUN cp "$(which uname)" "/bin/uname.orig" \
-	&& echo '#!/bin/sh\n/bin/uname.orig $* | sed "s/armv8l/armv7l/"' > "$(which uname)"
 
 # install updates and common utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	apt-transport-https \
 	bash-completion \
-	ca-certificates \
-	curl \
 	sshfs \
 	tmux \
 	&& apt-get clean \
@@ -34,9 +31,6 @@ RUN git clone https://github.com/c9/core.git . \
 
 # copy src files
 COPY . /usr/src/app/
-
-# install docker
-RUN curl -sSL https://get.docker.com/ | sh
 
 # store c9 workspace in a volume
 VOLUME $C9_WORKSPACE
