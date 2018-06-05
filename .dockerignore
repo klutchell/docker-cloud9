@@ -1,2 +1,4 @@
-Dockerfile
+.git
+Dockerfile*
 Makefile
+README.md
