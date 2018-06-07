@@ -1,5 +1,10 @@
 FROM resin/raspberrypi3-node:8.11.2
 
+ARG BUILD_DATE
+ARG VERSION=latest
+
+LABEL build_version="${VERSION}"
+LABEL build_date="${BUILD_DATE}"
 LABEL maintainer="kylemharding@gmail.com"
 
 # allow building on x86
@@ -28,7 +33,7 @@ RUN git clone --depth 1 https://github.com/c9/core.git . \
 	&& scripts/install-sdk.sh
 
 # copy src files
-COPY . /usr/src/app/
+COPY start.sh VERSION ./
 
 # store c9 workspace in a volume
 VOLUME $C9_WORKSPACE /root/.c9
