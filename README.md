@@ -5,20 +5,18 @@
 ## Build
 
 ```bash
-# build for rpi3
-make build-rpi3
+make build ARCH=armhf
 ```
 
 ## Deploy
 
 ```bash
-# deploy on rpi3
 docker run --name cloud9 \
 -v cloud9-data:/root/.c9 \
 -v cloud9-workspace:/workspace \
 -p 8080:8080 \
 -e TZ=America/Toronto \
-klutchell/cloud9:rpi3-latest
+klutchell/cloud9:armhf-latest
 ```
 
 ## Parameters
