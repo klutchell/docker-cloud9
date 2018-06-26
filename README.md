@@ -5,7 +5,11 @@
 ## Build
 
 ```bash
-make build ARCH=armhf
+# build for x86_64
+make
+
+# build for armhf
+make armhf
 ```
 
 ## Deploy
