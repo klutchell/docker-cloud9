@@ -1,13 +1,20 @@
 
 DOCKER_REPO		:= klutchell/cloud9
-ARCH			:= armhf
 VERSION			:= $$(cat ./VERSION)
 BUILD_DATE		:= $$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-IMAGE_NAME		:= ${DOCKER_REPO}:${ARCH}-${VERSION}
-LATEST_NAME		:= ${DOCKER_REPO}:${ARCH}-latest
-DOCKERFILE_PATH	:= ./${ARCH}/Dockerfile
+
+IMAGE_NAME		:= ${DOCKER_REPO}:${VERSION}
+LATEST_NAME		:= ${DOCKER_REPO}:latest
+DOCKERFILE_PATH	:= ./Dockerfile
 
 .DEFAULT_GOAL	:= build
+
+.PHONY : build
+
+armhf:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${VERSION}
+armhf:	LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
+armhf:	DOCKERFILE_PATH	:= ./armhf/Dockerfile
+armhf:	build
 
 bump:
 	@docker run --rm -v "${PWD}":/app treeder/bump patch

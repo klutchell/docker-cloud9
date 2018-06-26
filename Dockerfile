@@ -1,4 +1,4 @@
-FROM resin/raspberrypi3-node:8
+FROM node:8
 
 ARG BUILD_DATE
 ARG VERSION=latest
@@ -12,9 +12,6 @@ ENV C9_WORKSPACE /workspace
 ENV C9_PORT 80
 ENV C9_USER root
 ENV C9_PASS	resin
-
-# allow building on x86
-RUN [ "cross-build-start" ]
 
 # install updates and common utilities
 RUN DEBIAN_FRONTEND=noninteractive \
@@ -59,7 +56,4 @@ VOLUME $C9_WORKSPACE /root
 
 # run start script on boot
 CMD ["/bin/sh", "start.sh"]
-
-# end cross build
-RUN [ "cross-build-end" ]
 
