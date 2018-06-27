@@ -1,10 +1,10 @@
 
 DOCKER_REPO		:= klutchell/cloud9
-CACHE_TAG			:= $$(git describe --tags)
+CACHE_TAG		:= $$(git describe --tags)
 BUILD_VERSION	:= $$(git describe --tags --long --dirty --always)
 BUILD_DATE		:= $$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-IMAGE_NAME		:= ${DOCKER_REPO}:${CACHE_TAG}
+IMAGE_NAME		:= ${DOCKER_REPO}:${BUILD_VERSION}
 LATEST_NAME		:= ${DOCKER_REPO}:latest
 DOCKERFILE_PATH	:= ./Dockerfile
 
@@ -26,21 +26,11 @@ tag-patch:
 	@git push --tags
 
 build:
-	@docker build \
-	--build-arg "BUILD_VERSION=${BUILD_VERSION}" \
-	--build-arg "BUILD_DATE=${BUILD_DATE}" \
-	--tag ${IMAGE_NAME} \
-	--file ${DOCKERFILE_PATH} \
-	.
+	./hooks/build
 	@docker tag ${IMAGE_NAME} ${LATEST_NAME}
 
 build-nc:
-	@docker build --no-cache
-	--build-arg "BUILD_VERSION=${BUILD_VERSION}" \
-	--build-arg "BUILD_DATE=${BUILD_DATE}" \
-	--tag ${IMAGE_NAME} \
-	--file ${DOCKERFILE_PATH} \
-	.
+	./hooks/build --no-cache
 	@docker tag ${IMAGE_NAME} ${LATEST_NAME}
 
 push:
@@ -50,19 +40,19 @@ tag:			tag-patch
 
 release:		build push
 
-armhf-build:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${CACHE_TAG}
+armhf-build:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${BUILD_VERSION}
 armhf-build:	LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
-armhf-build:	DOCKERFILE_PATH	:= ./armhf/Dockerfile
+armhf-build:	DOCKERFILE_PATH	:= ./Dockerfile.armhf
 armhf-build:	build
 
-armhf-build-nc:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${CACHE_TAG}
+armhf-build-nc:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${BUILD_VERSION}
 armhf-build-nc:	LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
-armhf-build-nc:	DOCKERFILE_PATH	:= ./armhf/Dockerfile
+armhf-build-nc:	DOCKERFILE_PATH	:= ./Dockerfile.armhf
 armhf-build-nc:	build-nc
 
-armhf-push:		IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${CACHE_TAG}
+armhf-push:		IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${BUILD_VERSION}
 armhf-push:		LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
-armhf-push:		DOCKERFILE_PATH	:= ./armhf/Dockerfile
+armhf-push:		DOCKERFILE_PATH	:= ./Dockerfile.armhf
 armhf-push:		push
 
 armhf-release:	armhf-build armhf-push
