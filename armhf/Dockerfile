@@ -1,7 +1,7 @@
 FROM resin/raspberrypi3-node:8
 
-ARG BUILD_DATE=not provided
-ARG BUILD_VERSION=not provided
+ARG BUILD_DATE
+ARG BUILD_VERSION
 
 LABEL build_version="${BUILD_VERSION}"
 LABEL build_date="${BUILD_DATE}"
