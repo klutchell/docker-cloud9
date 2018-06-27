@@ -1,61 +1,52 @@
 
 DOCKER_REPO		:= klutchell/cloud9
-CACHE_TAG		:= $$(git describe --tags)
 BUILD_VERSION	:= $$(git describe --tags --long --dirty --always)
 BUILD_DATE		:= $$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-IMAGE_NAME		:= ${DOCKER_REPO}:${BUILD_VERSION}
-LATEST_NAME		:= ${DOCKER_REPO}:latest
-DOCKERFILE_PATH	:= ./Dockerfile
-
 .DEFAULT_GOAL	:= build
 
-tag-major: VERSION	:= $$(docker run --rm treeder/bump --input "${CACHE_TAG}" major)
+tag-major: VERSION	:= $$(docker run --rm treeder/bump --input "$$(git describe --tags)" major)
 tag-major:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
 	@git push --tags
 
-tag-minor: VERSION	:= $$(docker run --rm treeder/bump --input "${CACHE_TAG}" minor)
+tag-minor: VERSION	:= $$(docker run --rm treeder/bump --input "$$(git describe --tags)" minor)
 tag-minor:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
 	@git push --tags
 
-tag-patch: VERSION	:= $$(docker run --rm treeder/bump --input "${CACHE_TAG}" patch)
+tag-patch: VERSION	:= $$(docker run --rm treeder/bump --input "$$(git describe --tags)" patch)
 tag-patch:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
 	@git push --tags
 
+tag:	tag-patch
+
 build:
-	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${DOCKERFILE_PATH} ./hooks/build
-	@docker tag ${IMAGE_NAME} ${LATEST_NAME}
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile ./hooks/build
+	@docker tag ${DOCKER_REPO}:${BUILD_VERSION} ${DOCKER_REPO}:latest
 
 build-nc:
-	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${DOCKERFILE_PATH} ./hooks/build --no-cache
-	@docker tag ${IMAGE_NAME} ${LATEST_NAME}
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile ./hooks/build --no-cache
+	@docker tag ${DOCKER_REPO}:${BUILD_VERSION} ${DOCKER_REPO}:latest
+
+build-armhf:
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:armhf-${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile.armhf ./hooks/build
+	@docker tag ${DOCKER_REPO}:armhf-${BUILD_VERSION} ${DOCKER_REPO}:armhf-latest
+
+build-armhf-nc:
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${DOCKER_REPO}:armhf-${BUILD_VERSION} DOCKERFILE_PATH=Dockerfile.armhf ./hooks/build --no-cache
+	@docker tag ${DOCKER_REPO}:armhf-${BUILD_VERSION} ${DOCKER_REPO}:armhf-latest
 
 push:
-	@docker push ${IMAGE_NAME}
+	@docker push ${DOCKER_REPO}:${BUILD_VERSION}
 
-tag:			tag-patch
+push-armhf:
+	@docker push ${DOCKER_REPO}:armhf-${BUILD_VERSION}
 
 release:		build push
 
-armhf-build:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${BUILD_VERSION}
-armhf-build:	LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
-armhf-build:	DOCKERFILE_PATH	:= ./Dockerfile.armhf
-armhf-build:	build
+release-armhf:	build-armhf push-armhf
 
-armhf-build-nc:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${BUILD_VERSION}
-armhf-build-nc:	LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
-armhf-build-nc:	DOCKERFILE_PATH	:= ./Dockerfile.armhf
-armhf-build-nc:	build-nc
-
-armhf-push:		IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${BUILD_VERSION}
-armhf-push:		LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
-armhf-push:		DOCKERFILE_PATH	:= ./Dockerfile.armhf
-armhf-push:		push
-
-armhf-release:	armhf-build armhf-push
-
-armhf:			armhf-build
+armhf:			build-armhf
 
