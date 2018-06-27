@@ -13,17 +13,17 @@ DOCKERFILE_PATH	:= ./Dockerfile
 tag-major: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" major)
 tag-major:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
-	@git push ${VERSION}
+	@git push origin ${VERSION}
 
 tag-minor: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" minor)
 tag-minor:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
-	@git push ${VERSION}
+	@git push origin ${VERSION}
 
 tag-patch: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" patch)
 tag-patch:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
-	@git push ${VERSION}
+	@git push origin ${VERSION}
 
 build:
 	@docker build \
