@@ -16,19 +16,23 @@ make armhf
 
 ```bash
 docker run --name cloud9 \
--v cloud9-data:/root/.c9 \
--v cloud9-workspace:/workspace \
--p 8080:8080 \
--e TZ=America/Toronto \
-klutchell/cloud9:armhf-latest
+    -v cloud9_home:/root \
+    -v cloud9_workspace:/workspace \
+    -p 8080:8080 \
+    -e TZ=America/Toronto \
+    -e C9_USER=root \
+    -e C9_PASS=cloud9 \
+    klutchell/cloud9:armhf-latest
 ```
 
 ## Parameters
 
-* `-v cloud9-data:/root/.c9` - persistent data volume
-* `-v cloud9-workspace:/workspace` - persistent workspace volume
-* `-p 8080:8080` - ports to expose
+* `-v cloud9_home:/root` - persistent home volume
+* `-v cloud9_workspace:/workspace` - persistent workspace volume
+* `-p 8080:8080` - webui port (internal and external)
 * `-e TZ=America/Toronto` - local timezone
+* `-e C9_USER=root` - webui basic auth username
+* `-e C9_PASS=cloud9` - webui basic auth password
 
 ## Usage
 
