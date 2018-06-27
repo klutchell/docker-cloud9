@@ -26,11 +26,11 @@ tag-patch:
 	@git push --tags
 
 build:
-	./hooks/build
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${DOCKERFILE_PATH} ./hooks/build
 	@docker tag ${IMAGE_NAME} ${LATEST_NAME}
 
 build-nc:
-	./hooks/build --no-cache
+	BUILD_VERSION=${BUILD_VERSION} BUILD_DATE=${BUILD_DATE} IMAGE_NAME=${IMAGE_NAME} DOCKERFILE_PATH=${DOCKERFILE_PATH} ./hooks/build --no-cache
 	@docker tag ${IMAGE_NAME} ${LATEST_NAME}
 
 push:
