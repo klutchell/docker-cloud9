@@ -10,20 +10,20 @@ DOCKERFILE_PATH	:= ./Dockerfile
 
 .DEFAULT_GOAL	:= build
 
-bump-major: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" major)
-bump-major:
+tag-major: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" major)
+tag-major:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
-	@git push --tags
+	@git push ${VERSION}
 
-bump-minor: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" minor)
-bump-minor:
+tag-minor: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" minor)
+tag-minor:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
-	@git push --tags
+	@git push ${VERSION}
 
-bump-patch: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" patch)
-bump-patch:
+tag-patch: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" patch)
+tag-patch:
 	@git tag -a ${VERSION} -m "version ${VERSION}"
-	@git push --tags
+	@git push ${VERSION}
 
 build:
 	@docker build \
@@ -46,7 +46,7 @@ build-nc:
 push:
 	@docker push ${IMAGE_NAME}
 
-bump:			bump-patch
+tag:			tag-patch
 
 release:		build push
 
