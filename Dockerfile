@@ -34,7 +34,7 @@ RUN curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID"
 # install docker-ce
 RUN DEBIAN_FRONTEND=noninteractive \
 	apt-get update && apt-get install -yq --no-install-recommends \
-	docker \
+	docker-ce \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
