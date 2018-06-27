@@ -1,6 +1,7 @@
 
 DOCKER_REPO		:= klutchell/cloud9
-VERSION			:= $$(cat ./VERSION)
+VERSION			:= $$(git describe --tags)
+BUILD_VERSION	:= $$(git describe --tags --long --dirty --always)
 BUILD_DATE		:= $$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 IMAGE_NAME		:= ${DOCKER_REPO}:${VERSION}
@@ -9,12 +10,21 @@ DOCKERFILE_PATH	:= ./Dockerfile
 
 .DEFAULT_GOAL	:= build
 
-bump:
-	@docker run --rm -v "${PWD}":/app treeder/bump patch
+bump-major: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" major)
+bump-major:
+	@git tag -a ${VERSION} -m "version ${VERSION}"
+
+bump-minor: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" minor)
+bump-minor:
+	@git tag -a ${VERSION} -m "version ${VERSION}"
+
+bump-patch: VERSION	:= $$(docker run --rm treeder/bump --input "${VERSION}" patch)
+bump-patch:
+	@git tag -a ${VERSION} -m "version ${VERSION}"
 
 build:
 	@docker build \
-	--build-arg "VERSION=${VERSION}" \
+	--build-arg "BUILD_VERSION=${BUILD_VERSION}" \
 	--build-arg "BUILD_DATE=${BUILD_DATE}" \
 	--tag ${IMAGE_NAME} \
 	--file ${DOCKERFILE_PATH} \
@@ -23,7 +33,7 @@ build:
 
 build-nc:
 	@docker build --no-cache
-	--build-arg "VERSION=${VERSION}" \
+	--build-arg "BUILD_VERSION=${BUILD_VERSION}" \
 	--build-arg "BUILD_DATE=${BUILD_DATE}" \
 	--tag ${IMAGE_NAME} \
 	--file ${DOCKERFILE_PATH} \
@@ -33,7 +43,9 @@ build-nc:
 push:
 	@docker push ${IMAGE_NAME}
 
-release: bump build push
+bump:			bump-patch
+
+release:		build push
 
 armhf-build:	IMAGE_NAME		:= ${DOCKER_REPO}:armhf-${VERSION}
 armhf-build:	LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
@@ -50,7 +62,7 @@ armhf-push:		LATEST_NAME		:= ${DOCKER_REPO}:armhf-latest
 armhf-push:		DOCKERFILE_PATH	:= ./armhf/Dockerfile
 armhf-push:		push
 
-armhf-release:	bump armhf-build armhf-push
+armhf-release:	armhf-build armhf-push
 
-armhf:		armhf-build
+armhf:			armhf-build
 
