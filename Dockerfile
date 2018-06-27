@@ -10,8 +10,6 @@ LABEL maintainer="kylemharding@gmail.com"
 # set c9 env vars
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
-ENV C9_USER root
-ENV C9_PASS	cloud9
 
 # install updates and common utilities
 RUN DEBIAN_FRONTEND=noninteractive \
