@@ -34,6 +34,7 @@ docker run --name cloud9 \
 * `-e TZ=America/Toronto` - local timezone
 * `-e C9_USER=root` - webui basic auth username
 * `-e C9_PASS=cloud9` - webui basic auth password
+* `--privileged` - is required to run docker-in-docker
 
 ## Usage
 
@@ -50,3 +51,4 @@ _tbd_
 ## Acknowledgments
 
 * https://github.com/hwegge2/rpi-cloud9-ide
+* https://github.com/kdelfour/cloud9-docker
