@@ -11,6 +11,8 @@ LABEL maintainer="kylemharding@gmail.com"
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
+ENV DIND_OPTS "--iptables=false --data-root /docker"
+
 # install updates and common utilities
 RUN DEBIAN_FRONTEND=noninteractive \
 	apt-get update && apt-get install -yq --no-install-recommends \
