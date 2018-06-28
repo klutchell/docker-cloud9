@@ -45,7 +45,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # add custom flags to docker service
-RUN sed -r -i -e 's|^(ExecStart=.+)$|\1 --iptables=false|' \
+RUN sed -r -i -e 's|^(ExecStart=.+)$|\1 --iptables false --dns 8.8.8.8|' \
 /lib/systemd/system/docker.service
 
 # work in app dir for cloud9
