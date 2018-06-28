@@ -17,6 +17,7 @@ ENV DIND_OPTS "--iptables=false --data-root /docker"
 RUN DEBIAN_FRONTEND=noninteractive \
 	apt-get update && apt-get install -yq --no-install-recommends \
 	apt-transport-https \
+	aufs-tools \
 	bash-completion \
 	ca-certificates \
 	curl \
