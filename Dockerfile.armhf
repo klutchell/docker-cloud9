@@ -11,6 +11,8 @@ LABEL maintainer="kylemharding@gmail.com"
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
+ENV DIND_OPTS "--iptables=false --dns 8.8.8.8 --dns 8.8.4.4 --storage-driver aufs"
+
 # enable systemd
 ENV INITSYSTEM on
 
@@ -45,7 +47,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # add custom flags to docker service
-RUN sed -r -i -e 's|^(ExecStart=.+)$|\1 --iptables=false --dns 8.8.8.8|' \
+RUN sed -r -i -e "s|^(ExecStart=.+)$|\1 ${DIND_OPTS}|" \
 /lib/systemd/system/docker.service
 
 # work in app dir for cloud9
@@ -59,8 +61,8 @@ RUN git clone --depth 1 https://github.com/c9/core.git . \
 # copy src files
 COPY start.sh ./
 
-# store c9 workspace and home dir
-VOLUME $C9_WORKSPACE /root
+# volumes for workspace, home dir, and docker graph
+VOLUME ${C9_WORKSPACE} /root /docker
 
 # run start script on boot
 CMD ["/bin/sh", "start.sh"]

@@ -49,8 +49,8 @@ RUN git clone --depth 1 https://github.com/c9/core.git . \
 # copy src files
 COPY start.sh ./
 
-# store c9 workspace and home dir
-VOLUME $C9_WORKSPACE /root
+# volumes for workspace, home dir, and docker graph
+VOLUME ${C9_WORKSPACE} /root /docker
 
 # run start script on boot
 CMD ["/bin/sh", "start.sh"]
