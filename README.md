@@ -22,6 +22,7 @@ docker run --name cloud9 \
     -e TZ=America/Toronto \
     -e C9_USER=root \
     -e C9_PASS=cloud9 \
+    --privileged \
     klutchell/cloud9:armhf-latest
 ```
 
