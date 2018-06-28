@@ -11,6 +11,9 @@ LABEL maintainer="kylemharding@gmail.com"
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
+# enable systemd
+ENV INITSYSTEM on
+
 # allow building on x86
 RUN [ "cross-build-start" ]
 
@@ -40,6 +43,10 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	docker-ce \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# add custom flags to docker service
+RUN sed -r -i -e 's|^(ExecStart=.+)$|\1 --iptables=false|' \
+/lib/systemd/system/docker.service
 
 # work in app dir for cloud9
 WORKDIR /usr/src/app
