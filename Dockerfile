@@ -11,6 +11,7 @@ LABEL maintainer="kylemharding@gmail.com"
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
+# docker-in-docker daemon options
 ENV DIND_OPTS "--data-root /docker --storage-driver aufs"
 
 # install updates and common utilities
@@ -20,6 +21,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	aufs-tools \
 	bash-completion \
 	ca-certificates \
+	cgroupfs-mount \
 	curl \
 	git \
 	gnupg2 \
