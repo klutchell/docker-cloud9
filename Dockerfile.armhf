@@ -11,10 +11,10 @@ LABEL maintainer="kylemharding@gmail.com"
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
-ENV DIND_OPTS "--iptables=false --data-root /docker"
+ENV DIND_OPTS "--iptables=false --data-root /docker --storage-driver aufs"
 
 # enable systemd
-ENV INITSYSTEM on
+# ENV INITSYSTEM on
 
 # allow building on x86
 RUN [ "cross-build-start" ]
