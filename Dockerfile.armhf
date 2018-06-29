@@ -11,7 +11,7 @@ LABEL maintainer="kylemharding@gmail.com"
 ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
-ENV DIND_OPTS "--iptables=false --data-root /docker --storage-driver aufs"
+ENV DIND_OPTS "--data-root /docker --storage-driver aufs"
 
 # enable systemd
 # ENV INITSYSTEM on
