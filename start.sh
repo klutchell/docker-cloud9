@@ -6,6 +6,9 @@ ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 if [ "${INITSYSTEM}" != "on" ]
 then
+    # avoid cgroup mount errors
+    cgroupfs-mount || true
+    
     # start docker daemon in the background
     /usr/bin/dockerd ${DIND_OPTS} &
 fi
