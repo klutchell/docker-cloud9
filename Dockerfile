@@ -12,7 +12,7 @@ ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
 # docker-in-docker daemon options
-ENV DIND_OPTS "--data-root /docker --storage-driver aufs"
+ENV DIND_OPTS ""
 
 # install updates and common utilities
 RUN DEBIAN_FRONTEND=noninteractive \
@@ -21,7 +21,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	aufs-tools \
 	bash-completion \
 	ca-certificates \
-	cgroupfs-mount \
 	curl \
 	git \
 	gnupg2 \
@@ -56,7 +55,7 @@ RUN git clone --depth 1 https://github.com/c9/core.git . \
 COPY start.sh ./
 
 # volumes for workspace, home dir, and docker graph
-VOLUME ${C9_WORKSPACE} /root /docker
+VOLUME ${C9_WORKSPACE} /root /var/lib/docker
 
 # run start script on boot
 CMD ["/bin/sh", "start.sh"]

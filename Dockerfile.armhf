@@ -27,7 +27,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	aufs-tools \
 	bash-completion \
 	ca-certificates \
-	cgroupfs-mount \
 	curl \
 	git \
 	gnupg2 \
