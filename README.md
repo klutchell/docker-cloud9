@@ -19,9 +19,6 @@ docker run --name cloud9 \
     -v cloud9_home:/root \
     -v cloud9_workspace:/workspace \
     -p 8080:8080 \
-    -e TZ=America/Toronto \
-    -e C9_USER=root \
-    -e C9_PASS=cloud9 \
     --privileged \
     klutchell/cloud9
 ```
