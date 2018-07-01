@@ -12,7 +12,7 @@ ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
 # docker-in-docker daemon options
-ENV DIND_OPTS "--storage-driver aufs"
+ENV DIND_OPTS ""
 
 # enable systemd
 ENV INITSYSTEM on

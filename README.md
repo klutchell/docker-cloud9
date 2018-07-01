@@ -33,7 +33,7 @@ docker run --name cloud9 \
 
 ## Usage
 
-* log into the [cloud9 ide](https://c9.io/) by visiting `http://<server-ip>:8080`
+log into the [cloud9 ide](https://c9.io/) by visiting `http://<server-ip>:8080`
 
 ## Author
 
