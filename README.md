@@ -23,18 +23,16 @@ docker run --name cloud9 \
     -e C9_USER=root \
     -e C9_PASS=cloud9 \
     --privileged \
-    klutchell/cloud9:armhf-latest
+    klutchell/cloud9
 ```
 
-## Parameters
+## Environment
 
-* `-v cloud9_home:/root` - persistent home volume
-* `-v cloud9_workspace:/workspace` - persistent workspace volume
-* `-p 8080:8080` - webui port (internal and external)
-* `-e TZ=America/Toronto` - local timezone
-* `-e C9_USER=root` - webui basic auth username
-* `-e C9_PASS=cloud9` - webui basic auth password
-* `--privileged` - is required to run docker-in-docker
+|Name|Description|Example|
+|---|---|---|
+|`C9_USER`|(optional) username for http auth|`root`|
+|`C9_PASS`|(optional) password for http auth|`resin`|
+|`TZ`|(optional) container timezone|`America/Toronto`|
 
 ## Usage
 
