@@ -12,10 +12,10 @@ ENV C9_WORKSPACE /workspace
 ENV C9_PORT 8080
 
 # docker-in-docker daemon options
-ENV DIND_OPTS "--data-root /docker --storage-driver aufs"
+ENV DIND_OPTS "--storage-driver aufs"
 
 # enable systemd
-# ENV INITSYSTEM on
+ENV INITSYSTEM on
 
 # allow building on x86
 RUN [ "cross-build-start" ]
@@ -33,6 +33,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	gnupg2 \
 	software-properties-common \
 	sshfs \
+	sudo \
 	tmux \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -65,7 +66,7 @@ RUN git clone --depth 1 https://github.com/c9/core.git . \
 COPY start.sh ./
 
 # volumes for workspace, home dir, and docker graph
-VOLUME ${C9_WORKSPACE} /root /docker
+VOLUME ${C9_WORKSPACE} /root /var/lib/docker
 
 # run start script on boot
 CMD ["/bin/sh", "start.sh"]

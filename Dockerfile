@@ -26,6 +26,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	git \
 	gnupg2 \
 	software-properties-common \
+	sudo \
 	sshfs \
 	tmux \
 	&& apt-get clean \
