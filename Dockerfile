@@ -43,7 +43,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# work in app dir for cloud9
+# work in app dir
 WORKDIR /usr/src/app
 
 # clone & install cloud9 core 
